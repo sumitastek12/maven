@@ -1,0 +1,53 @@
+name: SeleniumTestExecution
+
+on:
+  schedule:
+   - cron: '0 2 * * *'
+
+jobs:
+  SeleniumTestOnLinux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setting up JDK 11 For Test Execution
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+       
+    - name: Running Test On Linux
+      run: mvn clean test -DBrowser=Chrome
+
+  SeleniumTestOnWindows:
+    needs: SeleniumTestOnLinux
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setting up JDK 11 For Test Execution
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+       
+    - name: Running Test On Windows
+      run: mvn clean test -DBrowser=Chrome
+
+  SeleniumTestOnMAC:
+    needs: SeleniumTestOnWindows
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setting up JDK 11 For Test Execution
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+       
+    - name: Running Test On MACOS
+      run: mvn clean test -DBrowser=Chrome
+
+  
